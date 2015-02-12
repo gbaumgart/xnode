@@ -6,8 +6,9 @@ define([
     "dgrid/Keyboard",
     "xide/views/GridView",
     'xide/types',
-    'xide/utils'
-], function (declare, BeanView, OnDemandGrid, Selection, Keyboard, GridView, types, utils) {
+    'xide/utils',
+    'xide/bean/Action'
+], function (declare, BeanView, OnDemandGrid, Selection, Keyboard, GridView, types, utils,Action) {
 
     return declare('xide.views.NodeServiceView', [BeanView, GridView],
         {
@@ -73,26 +74,63 @@ define([
             getItemActions: function () {
                 var currentItem = this.getItem()[0];
 
-                var actions = [];
-
-                var thiz = this.delegate;//make the delegate deal with the actions. That is done in
+                var actions = [],
+                    thiz = this.delegate,//forward to owner
+                    _types = types;//
 
                 /***
                  *  Service commands : stop & start
                  */
-                var isOnline = currentItem.status === types.SERVICE_STATUS.ONLINE;
-                var dstCommand = currentItem.status == types.SERVICE_STATUS.OFFLINE ? 'start' : 'stop';
+                var isOnline = currentItem.status === _types.SERVICE_STATUS.ONLINE;
+                var dstCommand = currentItem.status == _types.SERVICE_STATUS.OFFLINE ? 'start' : 'stop';
                 var canServiceAction = currentItem.can[dstCommand] !== false;
                 var serviceActionFunction = canServiceAction ? dstCommand == 'start' ? function (command, item, owner) {
-                    thiz.onStart(command, item, owner)
+                    thiz.onStart(command, [currentItem], owner)
                 } : function (command, item, owner) {
-                    thiz.onStop(command, item, owner);
+                    thiz.onStop(command, [currentItem], owner);
                 } : null;
 
-                var title = currentItem.status == types.SERVICE_STATUS.OFFLINE ? 'Start' : 'Stop';
-                var command = currentItem.status == types.SERVICE_STATUS.OFFLINE ? 'Start' : 'Stop';
-                var icon = currentItem.status == types.SERVICE_STATUS.OFFLINE ? 'el-icon-play' : 'el-icon-stop';
+                var title = currentItem.status == _types.SERVICE_STATUS.OFFLINE ? 'Start' : 'Stop';
+                var command = currentItem.status == _types.SERVICE_STATUS.OFFLINE ? 'Start' : 'Stop';
+                var icon = currentItem.status == _types.SERVICE_STATUS.OFFLINE ? 'el-icon-play' : 'el-icon-stop';
 
+
+                var _controlAction = Action.createDefault(title,icon,'Edit/' + title,'xnode',null,{
+                    handler:serviceActionFunction,
+                    widgetArgs:{
+                        disabled: !isOnline
+                    }
+                }).setVisibility(_types.ACTION_VISIBILITY.ACTION_TOOLBAR,{label:''}).
+                    setVisibility(_types.ACTION_VISIBILITY.MAIN_MENU,{}).
+                    setVisibility(_types.ACTION_VISIBILITY.CONTEXT_MENU,{});
+
+                actions.push(_controlAction);
+
+
+                var _reloadAction = Action.createDefault('Reload','el-icon-refresh','Edit/Reload','xnode',null,{
+                    handler: function () {
+                        thiz.onReload();
+                    }
+                }).setVisibility(_types.ACTION_VISIBILITY.ACTION_TOOLBAR,{label:''}).
+                    setVisibility(_types.ACTION_VISIBILITY.MAIN_MENU,{}).
+                    setVisibility(_types.ACTION_VISIBILITY.CONTEXT_MENU,{});
+
+                actions.push(_reloadAction);
+
+                var _consoleAction = Action.createDefault('Console','el-icon-indent-left','View/Console','xnode',null,{
+                    handler: function () {
+                        thiz.openConsole(currentItem);
+                    },
+                    widgetArgs:{
+                        disabled: !isOnline
+                    }
+                }).setVisibility(_types.ACTION_VISIBILITY.ACTION_TOOLBAR,{label:''}).
+                    setVisibility(_types.ACTION_VISIBILITY.MAIN_MENU,{}).
+                    setVisibility(_types.ACTION_VISIBILITY.CONTEXT_MENU,{});
+
+                actions.push(_consoleAction);
+
+                /*
                 actions.push({
                     title: title,
                     icon: icon,
@@ -103,8 +141,10 @@ define([
                     style: '',
                     handler: serviceActionFunction
                 });
+                */
 
 
+                /*
                 actions.push({
                     title: 'Console',
                     icon: 'el-icon-indent-left',
@@ -117,11 +157,13 @@ define([
                         thiz.openConsole(currentItem);
                     }
                 });
+                */
 
                 /***
                  *  General actions
                  */
                 //reload
+                /*
                 actions.push({
                     title: 'Reload',
                     icon: 'el-icon-refresh',
@@ -135,6 +177,7 @@ define([
                     }
                 });
 
+                */
                 if (actions.length == 0) {
                     return null;
                 }
