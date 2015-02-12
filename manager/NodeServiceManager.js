@@ -22,7 +22,7 @@ define([
      *
      * @class module: xnode/manager/NodeServiceManager
      */
-    return declare("xide.manager.NodeServiceManager", [ServerActionBase, BeanManager], {
+    return declare("xnode.manager.NodeServiceManager", [ServerActionBase, BeanManager], {
 
         serviceClass: 'XIDE_NodeJS_Service',
         cookiePrefix: 'nodeJSServices',
