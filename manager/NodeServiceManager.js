@@ -7,14 +7,13 @@ define([
     'dojox/encoding/digests/MD5',
     'xide/types',
     'xide/utils',
+    'xide/data/Memory',
     "dojo/cookie",
     "dojo/json",
-    "dojo/store/Memory",
-    "dojo/store/Observable",
-    'xide/views/NodeServiceView',
+    'xnode/views/NodeServiceView',
     'xide/client/WebSocket',
     'xide/views/ConsoleView'
-], function (declare, lang, ServerActionBase, BeanManager, MD5, types, utils, cookie, json, Memory, Observable, NodeServiceView, WebSocket, ConsoleView) {
+], function (declare, lang, ServerActionBase, BeanManager, MD5, types, utils,Memory,cookie, json,NodeServiceView, WebSocket, ConsoleView) {
 
     /**
      * Manager dealing with Node-Services though PHP shell (XPHP). This is is a typical
@@ -26,7 +25,7 @@ define([
 
         serviceClass: 'XIDE_NodeJS_Service',
         cookiePrefix: 'nodeJSServices',
-        singleton: false,
+        singleton: true,
         serviceView: null,
         clients: null,
         beanNamespace: 'serviceConsoleView',
@@ -161,7 +160,7 @@ define([
         /***
          * Init our store
          * @param data
-         * @returns {dojo.data.ItemFileWriteStore|*}
+         * @returns {xide.data.Memory}
          */
         initStore: function (data) {
 
@@ -171,7 +170,10 @@ define([
                 items: data
             };
 
-            this.store = Observable(Memory({data: sdata}));
+            this.store = new Memory({
+                data: sdata,
+                idProperty:'name'
+            });
             return this.store;
         },
         /////////////////////////////////////////////////////////////////////////////////////
@@ -188,6 +190,7 @@ define([
         createServiceView: function (store, where) {
 
             var parent = where || this.getViewTarget();
+
             this.serviceView = utils.addWidget(NodeServiceView, {
                 delegate: this,
                 store: store,
@@ -221,7 +224,7 @@ define([
 
             this.inherited(arguments);
             this.subscribe([types.EVENTS.ON_MAIN_MENU_OPEN, types.EVENTS.ON_CONTAINER_REMOVED]);
-            this.ls();
+            return this.ls();
         },
         /////////////////////////////////////////////////////////////////////////////////////
         //
@@ -246,9 +249,14 @@ define([
                 this.onReload();
             }.bind(this));
         },
+        /**
+         * @deprecated:
+         * @param evt
+         */
         onMainMenuOpen: function (evt) {
 
             var menu = evt['menu'];
+
 
             //add 'Services' to MainMenu->Views
             if (!menu['serviceMenuItem'] &&
@@ -294,24 +302,21 @@ define([
          */
         ls: function (readyCB, errorCB, emit) {
 
-            var thiz = this;
-
-            var _cb = function (data) {
-
-                //keep a copy
+            var thiz = this,
+                dfd = null;
+            dfd = this.runDeferred(null, 'ls');
+            dfd.then(function(data){
                 thiz.rawData = data;
                 thiz.initStore(data);
-
                 if (emit !== false) {
                     thiz.publish(types.EVENTS.ON_NODE_SERVICE_STORE_READY, {store: thiz.store});
                 }
-
                 if (readyCB) {
                     readyCB(data);
                 }
+            });
+            return dfd;
 
-            };
-            return this.callMethodEx(null, 'ls', null, _cb, true);
         }
     });
 });

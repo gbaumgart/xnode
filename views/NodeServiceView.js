@@ -21,7 +21,7 @@ define([
             createWidgets: function (store) {
 
                 var grid = new (declare([OnDemandGrid, Selection, Keyboard]))({
-                    store: store,
+                    collection: store,
                     columns: {
                         Name: {
                             field: "name", // get whole item for use by formatter
@@ -47,7 +47,7 @@ define([
                     }
                 }, this.containerNode);
 
-                grid.sort("name");
+                //grid.sort("name");
                 grid.refresh();
                 this.grid = grid;
                 this.onGridCreated(grid);
