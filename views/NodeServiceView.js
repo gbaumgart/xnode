@@ -75,14 +75,14 @@ define([
                 var currentItem = this.getItem()[0];
 
                 var actions = [],
-                    thiz = this.delegate,//forward to owner
-                    _types = types;//
+                    thiz = this.delegate;//forward to owner
+                    
 
                 /***
                  *  Service commands : stop & start
                  */
-                var isOnline = currentItem.status === _types.SERVICE_STATUS.ONLINE;
-                var dstCommand = currentItem.status == _types.SERVICE_STATUS.OFFLINE ? 'start' : 'stop';
+                var isOnline = currentItem.status === types.SERVICE_STATUS.ONLINE;
+                var dstCommand = currentItem.status == types.SERVICE_STATUS.OFFLINE ? 'start' : 'stop';
                 var canServiceAction = currentItem.can[dstCommand] !== false;
                 var serviceActionFunction = canServiceAction ? dstCommand == 'start' ? function (command, item, owner) {
                     thiz.onStart(command, [currentItem], owner)
@@ -90,9 +90,9 @@ define([
                     thiz.onStop(command, [currentItem], owner);
                 } : null;
 
-                var title = currentItem.status == _types.SERVICE_STATUS.OFFLINE ? 'Start' : 'Stop';
-                var command = currentItem.status == _types.SERVICE_STATUS.OFFLINE ? 'Start' : 'Stop';
-                var icon = currentItem.status == _types.SERVICE_STATUS.OFFLINE ? 'el-icon-play' : 'el-icon-stop';
+                var title = currentItem.status == types.SERVICE_STATUS.OFFLINE ? 'Start' : 'Stop';
+                var command = currentItem.status == types.SERVICE_STATUS.OFFLINE ? 'Start' : 'Stop';
+                var icon = currentItem.status == types.SERVICE_STATUS.OFFLINE ? 'el-icon-play' : 'el-icon-stop';
 
 
                 var _controlAction = Action.createDefault(title,icon,'Edit/' + title,'xnode',null,{
@@ -100,9 +100,9 @@ define([
                     widgetArgs:{
                         disabled: !isOnline
                     }
-                }).setVisibility(_types.ACTION_VISIBILITY.ACTION_TOOLBAR,{label:''}).
-                    setVisibility(_types.ACTION_VISIBILITY.MAIN_MENU,{}).
-                    setVisibility(_types.ACTION_VISIBILITY.CONTEXT_MENU,{});
+                }).setVisibility(types.ACTION_VISIBILITY.ACTION_TOOLBAR,{label:''}).
+                    setVisibility(types.ACTION_VISIBILITY.MAIN_MENU,{}).
+                    setVisibility(types.ACTION_VISIBILITY.CONTEXT_MENU,{});
 
                 actions.push(_controlAction);
 
@@ -111,9 +111,9 @@ define([
                     handler: function () {
                         thiz.onReload();
                     }
-                }).setVisibility(_types.ACTION_VISIBILITY.ACTION_TOOLBAR,{label:''}).
-                    setVisibility(_types.ACTION_VISIBILITY.MAIN_MENU,{}).
-                    setVisibility(_types.ACTION_VISIBILITY.CONTEXT_MENU,{});
+                }).setVisibility(types.ACTION_VISIBILITY.ACTION_TOOLBAR,{label:''}).
+                    setVisibility(types.ACTION_VISIBILITY.MAIN_MENU,{}).
+                    setVisibility(types.ACTION_VISIBILITY.CONTEXT_MENU,{});
 
                 actions.push(_reloadAction);
 
@@ -124,60 +124,12 @@ define([
                     widgetArgs:{
                         disabled: !isOnline
                     }
-                }).setVisibility(_types.ACTION_VISIBILITY.ACTION_TOOLBAR,{label:''}).
-                    setVisibility(_types.ACTION_VISIBILITY.MAIN_MENU,{}).
-                    setVisibility(_types.ACTION_VISIBILITY.CONTEXT_MENU,{});
+                }).setVisibility(types.ACTION_VISIBILITY.ACTION_TOOLBAR,{label:''}).
+                    setVisibility(types.ACTION_VISIBILITY.MAIN_MENU,{}).
+                    setVisibility(types.ACTION_VISIBILITY.CONTEXT_MENU,{});
 
                 actions.push(_consoleAction);
 
-                /*
-                actions.push({
-                    title: title,
-                    icon: icon,
-                    disabled: !canServiceAction,
-                    command: command,
-                    place: 'last',
-                    emit: false,
-                    style: '',
-                    handler: serviceActionFunction
-                });
-                */
-
-
-                /*
-                actions.push({
-                    title: 'Console',
-                    icon: 'el-icon-indent-left',
-                    disabled: !isOnline,
-                    command: 'Console',
-                    place: 'last',
-                    emit: false,
-                    style: '',
-                    handler: function () {
-                        thiz.openConsole(currentItem);
-                    }
-                });
-                */
-
-                /***
-                 *  General actions
-                 */
-                //reload
-                /*
-                actions.push({
-                    title: 'Reload',
-                    icon: 'el-icon-refresh',
-                    disabled: false,
-                    command: 'Reload',
-                    place: 'last',
-                    emit: false,
-                    style: '',
-                    handler: function () {
-                        thiz.onReload();
-                    }
-                });
-
-                */
                 if (actions.length == 0) {
                     return null;
                 }
