@@ -96,16 +96,12 @@ define([
 
 
                 var _controlAction = Action.createDefault(title,icon,'Edit/' + title,'xnode',null,{
-                    handler:serviceActionFunction,
-                    widgetArgs:{
-                        disabled: !isOnline
-                    }
+                    handler:serviceActionFunction
                 }).setVisibility(types.ACTION_VISIBILITY.ACTION_TOOLBAR,{label:''}).
                     setVisibility(types.ACTION_VISIBILITY.MAIN_MENU,{}).
                     setVisibility(types.ACTION_VISIBILITY.CONTEXT_MENU,{});
 
                 actions.push(_controlAction);
-
 
                 var _reloadAction = Action.createDefault('Reload','el-icon-refresh','Edit/Reload','xnode',null,{
                     handler: function () {

@@ -15,6 +15,7 @@ define([
     'xide/views/ConsoleView'
 ], function (declare, lang, ServerActionBase, BeanManager, MD5, types, utils,Memory,cookie, json,NodeServiceView, WebSocket, ConsoleView) {
 
+
     /**
      * Manager dealing with Node-Services though PHP shell (XPHP). This is is a typical
      * 'bean-manager' implementation.
@@ -54,6 +55,7 @@ define([
                 return;
             }
 
+            
             if (!this.clients)this.clients = {};
             var hash = this.getViewId(item);
 
