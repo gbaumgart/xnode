@@ -111,7 +111,6 @@ var profile = {
 
         // Files that should be copied as-is without being modified by the build system.
         copyOnly: function (filename, mid) {
-            console.error('filename ' + filename + ' mid : ' + mid);
             return copyOnly(mid);
         },
 
