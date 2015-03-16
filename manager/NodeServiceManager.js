@@ -197,7 +197,8 @@ define([
                 delegate: this,
                 store: store,
                 title: 'Services',
-                closable: true
+                closable: true,
+                style:'padding:0px'
             }, this, parent, true);
 
         },
