@@ -103,7 +103,7 @@ define([
 
                 actions.push(_controlAction);
 
-                var _reloadAction = Action.createDefault('Reload','el-icon-refresh','Edit/Reload','xnode',null,{
+                var _reloadAction = Action.createDefault('Reload','fa-refresh','Edit/Reload','xnode',null,{
                     handler: function () {
                         thiz.onReload();
                     }
