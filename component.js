@@ -1,11 +1,7 @@
 define([
     "dojo/_base/declare",
-    "dojo/_base/Deferred",
-    "dojo/has",
-    "xide/model/Component",
-    "xide/types",
-    "require"
-], function (declare,Deferred,has,Component,types,require) {
+    "xide/model/Component"
+], function (declare,Component) {
     /**
      * @class xnode.component
      * @inheritDoc
