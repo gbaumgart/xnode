@@ -9,13 +9,21 @@ define([
     'xdojo/has',
     'xdojo/has!xnode-ui?./NodeServiceManagerUI'
 ], function (declare, ServerActionBase, BeanManager, types, Memory,WebSocket,has,NodeServiceManagerUI) {
+
+    var bases = [ServerActionBase, BeanManager];
+
+    if(NodeServiceManagerUI){
+        bases.push(NodeServiceManagerUI);
+    }
+
+
     /**
      * Manager dealing with Node-Services though PHP shell (XPHP). This is is a typical
      * 'bean-manager' implementation.
      *
      * @class module: xnode/manager/NodeServiceManager
      */
-    var NodeServiceManager = declare("xnode.manager.NodeServiceManager", [ServerActionBase, BeanManager], {
+    var NodeServiceManager = declare("xnode.manager.NodeServiceManager", bases, {
 
         serviceClass: 'XIDE_NodeJS_Service',
         cookiePrefix: 'nodeJSServices',
@@ -106,9 +114,6 @@ define([
         /////////////////////////////////////////////////////////////////////////////////////
         init: function () {
             this.inherited(arguments);
-            if(this.initUI){
-                this.initUI();
-            }
             return this.ls();
         },
 
@@ -147,25 +152,23 @@ define([
         ls: function (readyCB, errorCB, emit) {
 
             var thiz = this,
-                dfd = this.runDeferred(null, 'ls').then(function(data){
-                    thiz.rawData = data;
-                    thiz.initStore(data);
-                    if (emit !== false) {
-                        thiz.publish(types.EVENTS.ON_NODE_SERVICE_STORE_READY, {store: thiz.store});
-                    }
-                    if (readyCB) {
-                        readyCB(data);
-                    }
-                });
+                dfd = this.runDeferred(null, 'ls');
+
+            dfd.then(function(data){
+                thiz.rawData = data;
+                thiz.initStore(data);
+                if (emit !== false) {
+                    thiz.publish(types.EVENTS.ON_NODE_SERVICE_STORE_READY, {store: thiz.store});
+                }
+                if (readyCB) {
+                    readyCB(data);
+                }
+            });
 
             return dfd;
         }
 
     });
-
-    if(has("xnode-ui")){
-        NodeServiceManager = NodeServiceManager.extend(NodeServiceManagerUI.prototype);
-    }
 
     return NodeServiceManager;
 });

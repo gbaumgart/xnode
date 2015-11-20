@@ -2,21 +2,14 @@
 define([
     "dojo/_base/declare",
     "dojo/_base/lang",
-    "xide/manager/ServerActionBase",
-    "xide/manager/BeanManager",
     'dojox/encoding/digests/MD5',
     'xide/types',
     'xide/utils',
-    'xide/data/Memory',
     "dojo/cookie",
     "dojo/json",
-    'xide/client/WebSocket',
     'xdojo/has!xnode-ui?xide/views/ConsoleView',
     'xdojo/has!xnode-ui?xnode/views/NodeServiceView'
-
-
-], function (declare, lang, ServerActionBase, BeanManager, MD5, types, utils,Memory,cookie, json,WebSocket, ConsoleView,NodeServiceView) {
-
+], function (declare, lang, MD5, types, utils,cookie, json,ConsoleView,NodeServiceView) {
 
     /**
      * Manager dealing with Node-Services though PHP shell (XPHP). This is is a typical
@@ -136,12 +129,6 @@ define([
                 this.createServiceView(this.store);
             }
         },
-        onContainerRemoved: function (evt) {
-
-        },
-        initUI:function(){
-            this.subscribe([types.EVENTS.ON_MAIN_MENU_OPEN, types.EVENTS.ON_CONTAINER_REMOVED]);
-        },
         /////////////////////////////////////////////////////////////////////////////////////
         //
         //  UX Callbacks
@@ -183,6 +170,50 @@ define([
                 });
                 menu.addChild(menu['serviceMenuItem']);
             }
+        },
+        openServices:function(){
+            this.openServiceView();
+        },
+        getActions:function(){
+
+            var result = [];
+            var thiz = this;
+
+            result.push(this.ctx.createAction('Services','Window/Service','fa-cube',null,'Home','File',"global",
+                //onCreate
+                function(action){
+
+                    /*
+                     action.setVisibility(types.ACTION_VISIBILITY.ALL, {
+                     show:false
+                     });
+                     */
+                },
+                //handler
+                function(){
+                    console.log('run handler');
+                    thiz.openServices();
+                },
+                {
+                    addPermission:true,
+                    show:true
+                },null,null,[
+
+                ],null,this
+            ));
+
+
+            return result;
+        },
+        init:function(){
+            var ctx = this.ctx;
+            //var permanentActionStore = ctx.getActionStore();
+            ctx.addActions(this.getActions());
+            //console.error('xnode',this.ctx);
+
+            //console.error('init xnode-ui manager');
+            //return this.inherit(arguments);
+
         }
     });
 });
