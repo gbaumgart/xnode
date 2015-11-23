@@ -157,6 +157,7 @@ define([
             dfd.then(function(data){
                 thiz.rawData = data;
                 thiz.initStore(data);
+                console.log('------ xnode services : ',data);
                 if (emit !== false) {
                     thiz.publish(types.EVENTS.ON_NODE_SERVICE_STORE_READY, {store: thiz.store});
                 }
