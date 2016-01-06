@@ -1,17 +1,17 @@
 define([
+    'dcl/dcl',
     "dojo/_base/declare",
-    'xide/views/BeanView',
     "dgrid/OnDemandGrid",
     "dgrid/Selection",
     "dgrid/Keyboard",
-    "xide/views/GridView",
     'xide/types',
     'xide/utils',
-    'xide/bean/Action'
-], function (declare, BeanView, OnDemandGrid, Selection, Keyboard, GridView, types, utils,Action) {
+    'xide/bean/Action',
+    'xide/layout/Container'
+], function (dcl,declare, OnDemandGrid, Selection, Keyboard, types, utils,Action,Container) {
 
-    return declare('xide.views.NodeServiceView', [BeanView, GridView],
-        {
+    return dcl(Container,{
+            declaredClass:'xide.views.NodeServiceView',
             delegate: null,
             store: null,
             cssClass: "layoutContainer normalizedGridView",

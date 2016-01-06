@@ -2,7 +2,7 @@
 define([
     "dojo/_base/declare",
     "dojo/_base/lang",
-    'dojox/encoding/digests/MD5',
+    'xide/encoding/MD5',
     'xide/types',
     'xide/utils',
     "dojo/cookie",
