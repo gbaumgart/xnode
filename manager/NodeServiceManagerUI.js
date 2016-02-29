@@ -179,15 +179,14 @@ define([
             var result = [];
             var thiz = this;
 
+            /*
             result.push(this.ctx.createAction('Services','Window/Service','fa-cube',null,'Home','File',"global",
                 //onCreate
                 function(action){
-
-                    /*
                      action.setVisibility(types.ACTION_VISIBILITY.ALL, {
                      show:false
                      });
-                     */
+
                 },
                 //handler
                 function(){
@@ -202,6 +201,7 @@ define([
                 ],null,this
             ));
 
+            */
 
             return result;
         },
