@@ -6,7 +6,7 @@ define([
     "dgrid/Keyboard",
     'xide/types',
     'xide/utils',
-    'xide/bean/Action',
+    'xide/action/Action',
     'xide/layout/Container'
 ], function (dcl,declare, OnDemandGrid, Selection, Keyboard, types, utils,Action,Container) {
 
