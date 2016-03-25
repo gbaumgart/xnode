@@ -1,6 +1,6 @@
 /** @module xnode/manager/NodeServiceManager **/
 define([
-    "dojo/_base/declare",
+    "dcl/dcl",
     "xide/manager/ServerActionBase",
     "xide/manager/BeanManager",
     'xide/types',
@@ -8,23 +8,19 @@ define([
     'xide/client/WebSocket',
     'xdojo/has',
     'xdojo/has!xnode-ui?./NodeServiceManagerUI'
-], function (declare, ServerActionBase, BeanManager, types, Memory,WebSocket,has,NodeServiceManagerUI) {
-
+], function (dcl, ServerActionBase, BeanManager, types, Memory,WebSocket,has,NodeServiceManagerUI) {
     var bases = [ServerActionBase, BeanManager];
-
     if(NodeServiceManagerUI){
         bases.push(NodeServiceManagerUI);
     }
-
-
     /**
      * Manager dealing with Node-Services though PHP shell (XPHP). This is is a typical
      * 'bean-manager' implementation.
      *
      * @class module: xnode/manager/NodeServiceManager
      */
-    var NodeServiceManager = declare("xnode.manager.NodeServiceManager", bases, {
-
+    var NodeServiceManager = dcl(bases, {
+        declaredClass:"xnode.manager.NodeServiceManager",
         serviceClass: 'XIDE_NodeJS_Service',
         cookiePrefix: 'nodeJSServices',
         singleton: true,
@@ -113,7 +109,6 @@ define([
         //
         /////////////////////////////////////////////////////////////////////////////////////
         init: function () {
-            this.inherited(arguments);
             return this.ls();
         },
 

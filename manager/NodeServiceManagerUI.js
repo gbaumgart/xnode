@@ -1,6 +1,6 @@
 /** @module xnode/manager/NodeServiceManager **/
 define([
-    "dojo/_base/declare",
+    "dcl/dcl",
     "dojo/_base/lang",
     'xide/encoding/MD5',
     'xide/types',
@@ -9,7 +9,7 @@ define([
     "dojo/json",
     'xdojo/has!xnode-ui?xide/views/ConsoleView',
     'xdojo/has!xnode-ui?xnode/views/NodeServiceView'
-], function (declare, lang, MD5, types, utils,cookie, json,ConsoleView,NodeServiceView) {
+], function (dcl, lang, MD5, types, utils,cookie, json,ConsoleView,NodeServiceView) {
 
     /**
      * Manager dealing with Node-Services though PHP shell (XPHP). This is is a typical
@@ -17,7 +17,8 @@ define([
      *
      * @class module: xnode/manager/NodeServiceManager
      */
-    return declare("xnode.manager.NodeServiceManagerUI", null, {
+    return dcl(null, {
+        declaredClass:"xnode.manager.NodeServiceManagerUI",
         /**
          * Bean protocol implementation, only getViewId gets managed through here, the rest
          * Override getViewId in bean protocol
@@ -210,7 +211,6 @@ define([
             //var permanentActionStore = ctx.getActionStore();
             ctx.addActions(this.getActions());
             //console.error('xnode',this.ctx);
-
             //console.error('init xnode-ui manager');
             //return this.inherit(arguments);
 
