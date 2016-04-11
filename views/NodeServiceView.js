@@ -3,13 +3,12 @@ define([
     "dojo/_base/declare",
     "dgrid/OnDemandGrid",
     "dgrid/Selection",
-    "dgrid/Keyboard",
+
     'xide/types',
     'xide/utils',
     'xide/action/Action',
     'xide/layout/Container'
-], function (dcl,declare, OnDemandGrid, Selection, Keyboard, types, utils,Action,Container) {
-
+], function (dcl,declare, OnDemandGrid, Selection, types, utils,Action,Container) {
     return dcl(Container,{
             declaredClass:'xide.views.NodeServiceView',
             delegate: null,
@@ -20,8 +19,7 @@ define([
              * @param store
              */
             createWidgets: function (store) {
-
-                var grid = new (declare([OnDemandGrid, Selection, Keyboard]))({
+                var grid = new (declare([OnDemandGrid, Selection, "Keyboard"]))({
                     collection: store,
                     columns: {
                         Name: {
