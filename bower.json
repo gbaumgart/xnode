@@ -1,6 +1,6 @@
 {
 	"author": "Günter Baumgart",
-	"name": "xnode",
+	"name": "xnode-js",
 	"version": "0.1.0",
 	"description": "small xide lib to deal with Node-JS packages",
 	"keywords": [
