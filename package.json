@@ -1,15 +1,21 @@
 {
     "name": "xnode",
-    "version": "1.0.0-dev",
+    "version": "0.1.1",
+    "contributors": [
+        {
+            "name": "Günter Baumgart",
+            "email": "baumgart.guenter@gmail.com",
+            "url": "http://net-commander.com"
+        }
+    ],
     "dependencies": {
     },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/gbaumgart/xnode.git"
+    },
     "devDependencies": {
-        "intern": "1.7",
-        "grunt": "~0.4.2",
-        "grunt-contrib-jshint": "~0.6.3",
-        "grunt-contrib-less": "~0.8.3",
-        "grunt-contrib-uglify": "~0.2.2",
-        "jsdoc-amddcl": "git://github.com/ibm-js/jsdoc-amddcl#master"
+
     },
     "licenses": [
         {
@@ -17,6 +23,5 @@
             "url": "https://github.com/ibm-js/delite/blob/master/LICENSE"
         }
     ],
-    "bugs": "https://github.com/ibm-js/delite/issues",
     "dojoBuild": "layer.profile.js"
 }

@@ -1,0 +1,29 @@
+{
+	"author": "Günter Baumgart",
+	"name": "xnode",
+	"version": "0.1.0",
+	"description": "small xide lib to deal with Node-JS packages",
+	"keywords": [
+		"xide",
+		"dojo",
+		"dojo2"
+	],
+	"authors": [
+	],
+	"main": "xnode.js",
+	"homepage": "http://dojotoolkit.org/",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/gbaumgart/xnode.git"
+	},
+	"dependencies": {
+		"xide":"latest"
+	},
+	"ignore": [
+		"tests",
+		"out",
+		"node_modules"
+	],
+	"license": [ "BSD-3-Clause" ],
+	"moduleType": [ "amd" ]
+}
