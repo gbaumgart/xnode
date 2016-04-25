@@ -3,10 +3,9 @@ define([
     "dojo/_base/declare",
     "dgrid/OnDemandGrid",
     "dgrid/Selection",
-
     'xide/types',
     'xide/utils',
-    'xide/action/Action',
+    'xaction/Action',
     'xide/layout/Container'
 ], function (dcl,declare, OnDemandGrid, Selection, types, utils,Action,Container) {
     return dcl(Container,{
