@@ -4,7 +4,6 @@ define([
     "xnode/manager/NodeServiceManagerUI",
     "xnode/views/NodeServiceView",
     "xnode/component"
-
 ], function(dojo){
     return dojo.xnode;
 });
