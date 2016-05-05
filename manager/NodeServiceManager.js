@@ -4,11 +4,12 @@ define([
     "xide/manager/ServerActionBase",
     "xide/manager/BeanManager",
     'xide/types',
+    'xide/factory',
     'xide/data/Memory',
     'xide/client/WebSocket',
     'xdojo/has',
     'xdojo/has!xnode-ui?./NodeServiceManagerUI'
-], function (dcl, ServerActionBase, BeanManager, types, Memory,WebSocket,has,NodeServiceManagerUI) {
+], function (dcl, ServerActionBase, BeanManager, types,factory,Memory,WebSocket,has,NodeServiceManagerUI) {
     var bases = [ServerActionBase, BeanManager];
     if(NodeServiceManagerUI){
         bases.push(NodeServiceManagerUI);
@@ -152,7 +153,6 @@ define([
             dfd.then(function(data){
                 thiz.rawData = data;
                 thiz.initStore(data);
-                console.log('------ xnode services : ',data);
                 if (emit !== false) {
                     thiz.publish(types.EVENTS.ON_NODE_SERVICE_STORE_READY, {store: thiz.store});
                 }
