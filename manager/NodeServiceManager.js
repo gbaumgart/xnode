@@ -8,8 +8,9 @@ define([
     'xide/data/Memory',
     'xide/client/WebSocket',
     'xdojo/has',
+    'xide/factory/Clients',
     'xdojo/has!xnode-ui?./NodeServiceManagerUI'
-], function (dcl, ServerActionBase, BeanManager, types,factory,Memory,WebSocket,has,NodeServiceManagerUI) {
+], function (dcl, ServerActionBase, BeanManager, types,factory,Memory,WebSocket,has,Clients,NodeServiceManagerUI) {
     var bases = [ServerActionBase, BeanManager];
     if(NodeServiceManagerUI){
         bases.push(NodeServiceManagerUI);
@@ -150,16 +151,21 @@ define([
             var thiz = this,
                 dfd = this.runDeferred(null, 'ls');
 
-            dfd.then(function(data){
-                thiz.rawData = data;
-                thiz.initStore(data);
-                if (emit !== false) {
-                    thiz.publish(types.EVENTS.ON_NODE_SERVICE_STORE_READY, {store: thiz.store});
-                }
-                if (readyCB) {
-                    readyCB(data);
-                }
-            });
+            try {
+                dfd.then(function (data) {
+                    thiz.rawData = data;
+                    thiz.initStore(data);
+                    if (emit !== false) {
+                        thiz.publish(types.EVENTS.ON_NODE_SERVICE_STORE_READY, {store: thiz.store});
+                    }
+                    if (readyCB) {
+                        readyCB(data);
+                    }
+                });
+            }catch(e){
+                console.error('error loading store',e)
+                logError(e,"error loading store");
+            }
 
             return dfd;
         }
