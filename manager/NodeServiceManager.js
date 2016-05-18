@@ -148,6 +148,7 @@ define([
          */
         ls: function (readyCB, errorCB, emit) {
 
+            console.log('xnode : ls' + this.serviceUrl,this);
             var thiz = this,
                 dfd = this.runDeferred(null, 'ls');
 
