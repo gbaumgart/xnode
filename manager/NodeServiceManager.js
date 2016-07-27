@@ -9,9 +9,11 @@ define([
     'xide/client/WebSocket',
     'xdojo/has',
     'xide/factory/Clients',
+    'dojo/Deferred',
     'xdojo/has!xnode-ui?./NodeServiceManagerUI'
-], function (dcl, ServerActionBase, BeanManager, types,factory,Memory,WebSocket,has,Clients,NodeServiceManagerUI) {
+], function (dcl, ServerActionBase, BeanManager, types,factory,Memory,WebSocket,has,Clients,Deferred,NodeServiceManagerUI) {
     var bases = [ServerActionBase, BeanManager];
+
     if(NodeServiceManagerUI){
         bases.push(NodeServiceManagerUI);
     }
@@ -21,6 +23,7 @@ define([
      *
      * @class module: xnode/manager/NodeServiceManager
      */
+
     var NodeServiceManager = dcl(bases, {
         declaredClass:"xnode.manager.NodeServiceManager",
         serviceClass: 'XIDE_NodeJS_Service',
@@ -69,7 +72,6 @@ define([
             client.connect();
             return client;
         },
-
         /////////////////////////////////////////////////////////////////////////////////////
         //
         //  Public API
@@ -104,7 +106,6 @@ define([
             });
             return this.store;
         },
-
         /////////////////////////////////////////////////////////////////////////////////////
         //
         //  Main entries, called by the context
@@ -113,7 +114,6 @@ define([
         init: function () {
             return this.ls();
         },
-
         /////////////////////////////////////////////////////////////////////////////////////
         //
         //  Server methods
@@ -147,21 +147,34 @@ define([
          * @returns {*}
          */
         ls: function (readyCB, errorCB, emit) {
+            //console.log('xnode : ls ' + this.serviceUrl,this);
+            var thiz = this;
+            var dfd = null;
 
-            console.log('xnode : ls' + this.serviceUrl,this);
-            var thiz = this,
-                dfd = this.runDeferred(null, 'ls');
+            function ready(data) {
+                thiz.rawData = data;
+                thiz.initStore(data);
+                if (emit !== false) {
+                    thiz.publish(types.EVENTS.ON_NODE_SERVICE_STORE_READY, {store: thiz.store});
+                }
+                if (readyCB) {
+                    readyCB(data);
+                }
+            }
+
+            if(this.services){
+                dfd = new Deferred();
+                ready(this.services);
+                dfd.resolve();
+                return dfd;
+            }
+
+
+            dfd = this.runDeferred(null, 'ls');
 
             try {
                 dfd.then(function (data) {
-                    thiz.rawData = data;
-                    thiz.initStore(data);
-                    if (emit !== false) {
-                        thiz.publish(types.EVENTS.ON_NODE_SERVICE_STORE_READY, {store: thiz.store});
-                    }
-                    if (readyCB) {
-                        readyCB(data);
-                    }
+                    ready(data);
                 });
             }catch(e){
                 console.error('error loading store',e)
@@ -172,6 +185,5 @@ define([
         }
 
     });
-
     return NodeServiceManager;
 });
