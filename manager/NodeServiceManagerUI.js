@@ -1,16 +1,15 @@
 /** @module xnode/manager/NodeServiceManager **/
 define([
     "dcl/dcl",
-    "dojo/_base/lang",
     'xide/encoding/MD5',
     'xide/types',
     'xide/utils',
     "dojo/cookie",
     "dojo/json",
+    "xide/lodash",
     'xdojo/has!xnode-ui?xide/views/ConsoleView',
     'xdojo/has!xnode-ui?xnode/views/NodeServiceView'
-], function (dcl, lang, MD5, types, utils,cookie, json,ConsoleView,NodeServiceView) {
-
+], function (dcl,MD5, types, utils,cookie, json,_,ConsoleView,NodeServiceView) {
     /**
      * Manager dealing with Node-Services though PHP shell (XPHP). This is is a typical
      * 'bean-manager' implementation.
@@ -36,33 +35,25 @@ define([
                 return;
             }
             var view = evt.view;
-            var console = evt.console;
             var client = view.client;
-
-            if (lang.isString(what)) {
+            if (_.isString(what)) {
                 client.emit(null, what);
             }
         },
         createConsole: function (what, parentContainer, client) {
-
             var viewId = this.getViewId(what);
-            try {
-                var view = utils.addWidget(ConsoleView, {
-                    delegate: this,
-                    title: what.name,
-                    closable: true,
-                    style: 'padding:0px;margin:0px;height:inherit',
-                    className: 'runView',
-                    client: client,
-                    item: what
-                }, this, parentContainer, true);
-                this.consoles[viewId] = view;
-                client.delegate = view;
-                return view;
-            } catch (e) {
-                console.error(e);
-            }
-
+            var view = utils.addWidget(ConsoleView, {
+                delegate: this,
+                title: what.name,
+                closable: true,
+                style: 'padding:0px;margin:0px;height:inherit',
+                className: 'runView',
+                client: client,
+                item: what
+            }, this, parentContainer, true);
+            this.consoles[viewId] = view;
+            client.delegate = view;
+            return view;
         },
         openConsole: function (item) {
             var view = this.getView(item);
@@ -105,9 +96,7 @@ define([
          * @param where
          */
         createServiceView: function (store, where) {
-
             var parent = where || this.getViewTarget();
-
             this.serviceView = utils.addWidget(NodeServiceView, {
                 delegate: this,
                 store: store,
@@ -115,12 +104,9 @@ define([
                 closable: true,
                 style:'padding:0px'
             }, this, parent, true);
-
         },
         openServiceView: function () {
-
             if (!this.isValid()) {
-
                 var thiz = this;
                 var _cb = function () {
                     thiz.createServiceView(thiz.store);
@@ -153,67 +139,15 @@ define([
                 this.onReload();
             }.bind(this));
         },
-        /**
-         * @deprecated:
-         * @param evt
-         */
-        onMainMenuOpen: function (evt) {
-
-            var menu = evt['menu'];
-
-
-            //add 'Services' to MainMenu->Views
-            if (!menu['serviceMenuItem'] &&
-                menu['name'] == types.MAIN_MENU_KEYS.VIEWS) {
-                menu['serviceMenuItem'] = new dijit.MenuItem({
-                    label: "Services",
-                    onClick: lang.hitch(this, 'openServiceView')
-                });
-                menu.addChild(menu['serviceMenuItem']);
-            }
-        },
         openServices:function(){
             this.openServiceView();
         },
         getActions:function(){
-
-            var result = [];
-            var thiz = this;
-
-            /*
-            result.push(this.ctx.createAction('Services','Window/Service','fa-cube',null,'Home','File',"global",
-                //onCreate
-                function(action){
-                     action.setVisibility(types.ACTION_VISIBILITY.ALL, {
-                     show:false
-                     });
-
-                },
-                //handler
-                function(){
-                    console.log('run handler');
-                    thiz.openServices();
-                },
-                {
-                    addPermission:true,
-                    show:true
-                },null,null,[
-
-                ],null,this
-            ));
-
-            */
-
-            return result;
+            return [];
         },
         init:function(){
             var ctx = this.ctx;
-            //var permanentActionStore = ctx.getActionStore();
             ctx.addActions(this.getActions());
-            //console.error('xnode',this.ctx);
-            //console.error('init xnode-ui manager');
-            //return this.inherit(arguments);
-
         }
     });
 });
