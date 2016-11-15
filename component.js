@@ -1,12 +1,12 @@
 define([
-    "dojo/_base/declare",
+    "dcl/dcl",
     "xide/model/Component"
-], function (declare,Component) {
+], function (dcl,Component) {
     /**
      * @class xnode.component
      * @inheritDoc
      */
-    return declare([Component], {
+    return dcl(Component, {
         /**
          * @inheritDoc
          */
