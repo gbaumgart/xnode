@@ -107,7 +107,15 @@ define([
         //
         /////////////////////////////////////////////////////////////////////////////////////
         init: function () {
-            return this.ls();
+            var dfd = new Deferred();
+            var self = this;
+            this.serviceObject.__init.then(function(){
+                self.ls().then(function(){
+                    dfd.resolve();
+                });
+            });
+            return dfd;
+
         },
         /////////////////////////////////////////////////////////////////////////////////////
         //
