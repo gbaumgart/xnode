@@ -109,11 +109,15 @@ define([
         init: function () {
             var dfd = new Deferred();
             var self = this;
-            this.serviceObject.__init.then(function(){
-                self.ls().then(function(){
-                    dfd.resolve();
+            if(this.serviceObject && this.serviceObject.__init) {
+                this.serviceObject.__init.then(function () {
+                    self.ls().then(function () {
+                        dfd.resolve();
+                    });
                 });
-            });
+            }else if(this.services){//exported apps have the services already
+                return this.ls();
+            }
             return dfd;
 
         },
