@@ -132,11 +132,9 @@ define([
         checkServer: function (settings, readyCB) {
             return this.callMethodEx(null, 'checkServer', [settings], readyCB, true);
         },
-
         runServer: function (settings, readyCB) {
             return this.callMethodEx(null, 'runDebugServer', [settings], readyCB, true);
         },
-
         runDebug: function (settings, readyCB) {
             return this.callMethodEx(null, 'run', [settings], readyCB, true);
         },
