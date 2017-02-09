@@ -14,7 +14,7 @@
 	"homepage": "http://dojotoolkit.org/",
 	"repository": {
 		"type": "git",
-		"url": "git://github.com/gbaumgart/xnode.git"
+		"url": "git://github.com/xblox/xnode.git"
 	},
 	"dependencies": {
 		"xide":"latest"
